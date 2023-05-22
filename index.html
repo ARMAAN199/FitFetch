@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Personal Dashboard</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <meta
+      name="google-signin-client_id"
+      content="851567756473-htv56phoq49r09r04glo4gflpqqhuo1k.apps.googleusercontent.com"
+    />
+  </head>
+  <body>
+    <h1>Welcome to Your Personal Dashboard</h1>
+
+    <div id="dashboard" style="display: none">
+      <h2>Your Data</h2>
+      <pre id="jsonData"></pre>
+      <button onclick="signOut()">Logout</button>
+    </div>
+
+    <div id="login">
+      <h2>Login</h2>
+      <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </div>
+
+    <script>
+      // DOM elements
+      const dashboardDiv = document.getElementById("dashboard");
+      const jsonDataPre = document.getElementById("jsonData");
+      const loginDiv = document.getElementById("login");
+
+      // Function to initialize the Google Sign-In
+      function initializeGoogleSignIn() {
+        gapi.load("auth2", function () {
+          gapi.auth2
+            .init({
+              client_id:
+                "851567756473-htv56phoq49r09r04glo4gflpqqhuo1k.apps.googleusercontent.com",
+            })
+            .then(function () {
+              renderSigninButton();
+            });
+        });
+      }
+
+      // Function to render the Google Sign-In button
+      function renderSigninButton() {
+        gapi.signin2.render("login", {
+          scope: "profile email",
+          width: 200,
+          height: 50,
+          longtitle: true,
+          theme: "dark",
+          onsuccess: onSignIn,
+        });
+      }
+
+      // Function to handle successful sign-in
+      function onSignIn(user) {
+        dashboardDiv.style.display = "block";
+        loginDiv.style.display = "none";
+        jsonDataPre.textContent = JSON.stringify(
+          user.getBasicProfile(),
+          null,
+          2
+        );
+      }
+
+      // Function to handle sign-out
+      function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+          dashboardDiv.style.display = "none";
+          loginDiv.style.display = "block";
+        });
+      }
+    </script>
+    <script
+      src="https://apis.google.com/js/platform.js?onload=initializeGoogleSignIn"
+      async
+      defer
+    ></script>
+  </body>
+</html>
