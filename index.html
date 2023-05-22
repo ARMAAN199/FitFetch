@@ -56,6 +56,7 @@
 
       // Function to handle successful sign-in
       function onSignIn(user) {
+        console.log("User signed in.", user);
         dashboardDiv.style.display = "block";
         loginDiv.style.display = "none";
         jsonDataPre.textContent = JSON.stringify(
